@@ -1,0 +1,6 @@
+[build_requires]
+boost_build/1.69.0@bincrafters/stable
+
+[generators]
+virtualenv
+b2

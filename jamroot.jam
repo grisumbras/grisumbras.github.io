@@ -1,0 +1,11 @@
+import options ;
+
+
+project blog
+  : build-dir build
+  ;
+
+local prefix = [ options.get prefix : build/stage ] ;
+
+
+install index.html : <location>$(prefix) ;
