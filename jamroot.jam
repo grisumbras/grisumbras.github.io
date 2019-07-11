@@ -1,4 +1,6 @@
 import option ;
+import path ;
+import sequence ;
 
 
 project blog
@@ -17,7 +19,26 @@ css theme
     <asciidoctor-attribute>linkcss
     <asciidoctor-attribute>stylesheet=$(uri-base)/assets/theme.css
   ;
-install theme-installed : theme : <location>$(prefix)/assets ;
 
-html index : pages/index.adoc theme ;
-install index-installed : index : <location>$(prefix) ;
+
+rule render-page ( source ) {
+  local target = $(source:S=) ;
+  html $(target) : $(source) theme ;
+  return $(target) ;
+}
+
+
+rule install-page ( source ) {
+  local installed-path
+    = [ path.root [ path.relative $(source) pages ] $(prefix) ] ;
+  install $(source).installed : $(source) : <location>$(installed-path:P) ;
+}
+
+
+local sources = [ glob-tree-ex pages : *.adoc ] ;
+local pages = [ sequence.transform render-page : $(sources) ] ;
+
+alias install
+  : [ sequence.transform install-page : $(pages) ]
+    [ install theme.installed : theme : <location>$(prefix)/assets ]
+  ;
