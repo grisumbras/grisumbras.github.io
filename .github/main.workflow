@@ -4,10 +4,10 @@ workflow "Publish" {
 }
 
 action "publish" {
-  uses = "./.github/publish"
+  uses = "peaceiris/actions-gh-pages@v1.0.1"
   env = {
-    GH_PAGES_PUBLISH_BRANCH = "master"
-    GH_PAGES_STAGE_DIR = "stage"
+    PUBLISH_DIR  = "stage"
+    PUBLISH_BRANCH = "master"
   }
-  secrets = ["GITHUB_TOKEN"]
+  secrets = ["ACTIONS_DEPLOY_KEY"]
 }
