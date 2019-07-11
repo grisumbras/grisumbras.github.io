@@ -11,6 +11,9 @@ test -z "$GH_PAGES_STAGE_DIR" \
 cd "${GH_PAGES_STAGE_DIR}" \
   || die could not enter directory "$GH_PAGES_STAGE_DIR"
 
+echo ====
+cat /github/workflow/event.json
+echo ====
 if [ -z "${GH_PAGES_PUBLISH_BRANCH}" ]; then
   GH_PAGES_PUBLISH_BRANCH=gh-pages
   echo GH_PAGES_PUBLISH_BRANCH environment variable was not set
