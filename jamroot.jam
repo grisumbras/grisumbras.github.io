@@ -1,5 +1,7 @@
 import option ;
 
+using asciidoctor ;
+
 
 project blog
   : build-dir build
@@ -8,4 +10,5 @@ project blog
 local prefix = [ option.get prefix : build/stage ] ;
 
 
-install index : index.html : <location>$(prefix) ;
+html index : pages/index.adoc ;
+install index-installed : index : <location>$(prefix) ;
