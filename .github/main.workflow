@@ -1,20 +1,10 @@
-workflow "Publish" {
+workflow "Build" {
   on = "push"
   resolves = "publish"
 }
 
-action "build" {
-  uses = "./.github/build"
-}
-
-action "only-develop" {
-  needs = ["build"]
-  uses = "actions/bin/filter@master"
-  args = "branch develop"
-}
-
 action "publish" {
-  needs = ["only-develop"]
+  needs = "only-develop"
   uses = "peaceiris/actions-gh-pages@v1.0.1"
   env = {
     PUBLISH_DIR  = "build/stage"
@@ -22,3 +12,22 @@ action "publish" {
   }
   secrets = ["ACTIONS_DEPLOY_KEY"]
 }
+
+action "only-develop" {
+  needs = "build"
+  uses = "actions/bin/filter@master"
+  args = "branch develop"
+}
+
+action "build" {
+  needs = "pull-dependencies"
+  uses = "./.github/build"
+}
+
+action "pull-dependencies" {
+  uses = "grisumbras/conan-actions/remote-add@master"
+  env = {
+    CONAN_REMOTES = "https://api.bintray.com/conan/bincrafters/public-conan"
+  }
+}
+
