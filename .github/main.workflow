@@ -26,11 +26,11 @@ action "build" {
 
 action "pull-dependencies" {
   needs = "add-remotes"
-  uses = "grisumbras/conan-actions/install@master"
+  uses = "grisumbras/conan-actions/install@0.1.0"
 }
 
 action "add-remotes" {
-  uses = "grisumbras/conan-actions/remote-add@master"
+  uses = "grisumbras/conan-actions/remote-add@0.1.0"
   env = {
     CONAN_REMOTES = "https://api.bintray.com/conan/bincrafters/public-conan"
   }
