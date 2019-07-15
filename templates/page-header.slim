@@ -1,0 +1,19 @@
+/ Copyright (c) 2024 Dmitry Arkhipov (grisumbras@yandex.ru)
+/
+/ Distributed under the Boost Software License, Version 1.0. (See accompanying
+/ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+nav#site-navigation.container
+  div.row
+    a.home-link.col-t-9.col-m-0.left-m href="#{attr 'baseurl'}"
+      | #{attr 'project-title'}
+
+    a.show-menu.col-t-3.hide-m href="#site-navigation" title="Show navigation"
+    a.hide-menu.col-t-3.hide-m href="#" title="Hide navigation"
+    div#main-menu.col-t-12.col-m-0.right-m.show-m
+      ul
+        li
+          a href="#" Links
+          ul
+            li: a href="#{attr 'repository'}" Project's GitHub
+            li: a href="#{attr 'repository'}/blob/master/#{attr 'source'}" Edit this page

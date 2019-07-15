@@ -1,0 +1,75 @@
+/ Copyright (c) 2024 Dmitry Arkhipov (grisumbras@yandex.ru)
+/
+/ Distributed under the Boost Software License, Version 1.0. (See accompanying
+/ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+doctype html
+html
+  head
+    ruby:
+      p = attr 'project-title'
+      t = doctitle(:sanitize => true, :use_fallback => true)
+    title #{p} | #{t != p ? t : 'Home'}
+
+    meta charset="UTF-8"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+    - [:description, :keywords, :author, :copyright, 'theme-color'].each do |key|
+      - if attr? key
+        meta name="#{key}" content="#{attr key}"
+
+    - ['next', 'prev', 'first'].each do |key|
+      - if attr? key
+        link rel="#{key}" href="#{attr key}"
+
+    link rel="stylesheet" href="#{attr 'stylesdir'}/#{attr 'stylesheet'}"
+    link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,400i,600%7CSource+Sans+Pro:400,400i,600,600i&amp;subset=latin-ext"
+
+  body
+    header#page-header
+      include page-header
+
+    main.container
+      div.row
+        article#page-content.col-l-10.push-l-1
+          header#title
+            h1 #{t}
+            - if attr? 'subtitle'
+              p.subtitle  #{attr 'subtitle'}
+            hr
+
+          div#main-content #{content}
+
+      nav.doc-nav.row
+        - if attr? 'prev'
+          p.col-t-1.push-l-1.left-t.prev-item
+            a.prev-page href="#{attr 'baseurl'}/#{attr 'prev'}"
+              i.icon
+              span.text Previous
+        - if attr? 'next'
+          p.col-t-1.pull-t-1.right-t.next-item
+            a.next-page href="#{attr 'baseurl'}/#{attr 'next'}"
+              i.icon
+              span.text Next
+
+    footer#page-footer
+      div.container
+        div.row
+          p.col-l-10.push-l-1
+            == "&copy; Dmitry Arkhipov, 2024. Available under "
+            a href="http://www.boost.org/LICENSE_1_0.txt" BSL 1.0
+            | .
+            br/
+
+            |<> Built using
+            a href="https://www.bfgroup.xyz/b2" b2
+            |<> and
+            a href="https://asciidoctor.org" Asciidoctor
+            | .
+            br/
+
+            |> Theme is built with
+            a href="https://sass-lang.com" Sass
+            |<> and is based on
+            a href="https://mcss.mosra.cz" m.css
+            | .

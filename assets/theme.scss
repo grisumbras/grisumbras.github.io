@@ -1,0 +1,109 @@
+// Copyright (c) 2024 Dmitry Arkhipov <grisumbras@yandex.ru>
+//
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+
+@import "normalize/mixin";
+@include normalize();
+
+@import "colors";
+@import "viewport-breakpoints";
+@import "dimensions";
+@import "grid";
+@import "layout";
+
+
+// $border-radius: 0.2rem;
+
+
+@mixin link-color($color, $active-color) {
+  a {
+    color: $color;
+    &:hover, &:focus, &:active { color: $active-color; }
+  }
+}
+
+
+html { background-color: $background-color; }
+
+body {
+  color: $color;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+#page-header {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: $header-background-color;
+  color: $header-color;
+}
+
+@include link-color($link-color, $link-active-color);
+
+.doc-nav {
+  &::before {
+    content: ' ';
+    clear: both;
+  }
+
+  @include link-color($dim-link-color, $dim-link-active-color);
+}
+
+@include viewport-breakpoint-up(l) {
+  .doc-nav {
+    .prev-item { text-align: left; }
+    .next-item { text-align: right; }
+  }
+}
+
+#main-content {
+  hr {
+    width: 75%;
+    border-width: 0.0625rem;
+    border-style: solid;
+  }
+}
+
+#page-footer {
+  font-size: $footer-font-size;
+  color: $footer-color;
+  background-color: $footer-background-color;
+  text-align: center;
+
+  @include link-color($footer-link-color, $footer-link-active-color);
+}
+
+//
+// blockquote {
+//   padding: 1rem;
+//   border-left-style: solid;
+//   border-left-width: 0.25rem;
+// }
+
+// blockquote, hr { border-color: $line-color; }
+//
+// pre {
+//   padding: 0.5rem 1rem;
+//   color: $code-color;
+//   background-color: $code-background-color;
+//   border-radius: $border-radius;
+//   overflow-x: auto;
+// }
+//
+// abbr { cursor: help; }
+// mark {
+//   padding: 0.0625rem;
+//   background-color: $mark-background-color;
+//   color: $mark-color;
+// }
+//
+// code {
+//   padding: 0.125rem;
+//   color: $code-color;
+//   background-color: $code-background-color;
+// }
+//
+// /* Focus outline on link, canvas and input: match the focused header item. */
+// *:focus { outline-color: $header-link-current-color; }

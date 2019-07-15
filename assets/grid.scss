@@ -1,0 +1,154 @@
+// Copyright (c) 2024 Dmitry Arkhipov <grisumbras@yandex.ru>
+//
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+
+// The grid system is based on ideas from Bootstrap (https://getbootstrap.com/)
+// and m.css (https://github.com/mosra/m.css)
+//
+// Each row in a grid is split into the same amount of columns (the number is
+// configurable). An element in a row can span several columns. What's even
+// better, is that an element can occupy different amount of columns depending
+// on screen width. This creates a "responsive" or "adaptable" page layout.
+
+
+// grid configuration
+$grid-columns: 12 !default; // the number of columns in the grid
+$grid-gutter-width: 2 * $base-width !default; // the width of gutters between
+                                              // columns
+
+// maximum widths of containers for different screen sizes.
+$container-max-widths: (
+  s: 560px,
+  m: 750px,
+  l: 960px,
+  // h: 1160px
+) !default;
+
+
+html {
+  box-sizing: border-box;
+  -ms-overflow-style: scrollbar;
+}
+
+*, *::before, *::after { box-sizing: inherit; }
+
+
+// containers
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: $grid-gutter-width / 2;
+  padding-left: $grid-gutter-width / 2;
+}
+
+@each $breakpoint, $max-width in $container-max-widths {
+  @include viewport-breakpoint-up($breakpoint, $viewport-breakpoints) {
+    .container { max-width: $max-width; }
+  }
+}
+
+
+// rows
+.row {
+  margin-right: -$grid-gutter-width / 2;
+  margin-left: -$grid-gutter-width / 2;
+
+  &:after { // avoid rows floating around each other
+    display: table;
+    clear: both;
+    content: ' ';
+  }
+}
+
+
+// columns
+%grid-column {
+  position: relative;
+  padding-right: $grid-gutter-width / 2;
+  padding-left: $grid-gutter-width / 2;
+}
+
+%grid-show { display: none; }
+
+$tiniest: nth(map-keys($viewport-breakpoints), 1);
+@each $breakpoint in map-keys($viewport-breakpoints) {
+  @if $breakpoint != $tiniest {
+    .show-#{$breakpoint} { @extend %grid-show; }
+  }
+
+  @for $i from 1 through $grid-columns {
+    .col-#{$breakpoint}-#{$i} { @extend %grid-column; }
+  }
+
+  @include viewport-breakpoint-up($breakpoint, $viewport-breakpoints) {
+    %grid-column-#{$breakpoint}-active { float: left; }
+
+    @for $i from 1 through $grid-columns {
+      .col-#{$breakpoint}-#{$i} {
+        @extend %grid-column-#{$breakpoint}-active;
+        width: 100% * $i / 12;
+      }
+
+      @if $i < $grid-columns {
+        .push-#{$breakpoint}-#{$i}  { left: 100% * $i / 12; }
+        .pull-#{$breakpoint}-#{$i}  { right: 100% * $i / 12; }
+      }
+    }
+
+    @if $breakpoint != $tiniest {
+      .col-#{$breakpoint}-0 {
+        width: auto;
+        float: none;
+      }
+      .hide-#{$breakpoint} { display: none; }
+      .show-#{$breakpoint} { display: block; }
+    }
+
+    .left-#{$breakpoint} {
+      padding-right: $grid-gutter-width / 2;
+      float: left;
+    }
+
+    %grid-right-#{$breakpoint} {
+      padding-left: 1rem;
+      float: right;
+    }
+
+    %grid-center-#{$breakpoint} {
+      margin-left: auto;
+      margin-right: auto;
+      float: none;
+    }
+
+    .right-#{$breakpoint} { @extend %grid-right-#{$breakpoint}; }
+    .center-#{$breakpoint} { @extend %grid-center-#{$breakpoint}; }
+    @for $i from 0 through $grid-columns {
+      .right-#{$breakpoint} { @extend %grid-right-#{$breakpoint}; }
+      .center-#{$breakpoint} { @extend %grid-center-#{$breakpoint}; }
+    }
+  }
+}
+
+
+// clearfixes
+%grid-clearfix {
+  &::after {
+    display: block;
+    content: ' ';
+    clear: both;
+  }
+}
+
+@for $i from 1 to length($viewport-breakpoints) {
+  $curr: nth(nth($viewport-breakpoints, $i), 1);
+  $next: nth(nth($viewport-breakpoints, $i + 1), 1);
+
+  .m-clearfix-#{$next} { @extend %grid-clearfix; }
+
+  @include viewport-breakpoint-up($next, $viewport-breakpoints) {
+    .m-clearfix-#{$curr}::after { display: none; }
+  }
+}

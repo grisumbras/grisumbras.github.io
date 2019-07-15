@@ -1,16 +1,71 @@
 # Copyright (c) 2024 Dmitry Arkhipov (grisumbras@yandex.ru)
 #
 # Distributed under the Boost Software License, Version 1.0. (See accompanying
-# file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-#
-# Official repository: https://github.com/grisumbras/grisumbras.github.io
+# file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+import option ;
+import path ;
+import sequence ;
 
 using asciidoctor ;
+using sass ;
 
 
 project blog ;
 
 
-html index : pages/index.adoc ;
+local rule theme-properties ( path : includes ? ) {
+  local templates = [ glob-tree-ex $(path) : *.* ] ;
+  if $(includes) { templates += [ glob-tree-ex $(includes) : *.* ] ; }
 
-install install : index : <location>(htmldir) ;
+  return
+    <flags>"-T $(path)"
+    <dependency>$(templates)
+    <asciidoctor-attribute>layout-include=$(includes)
+    ;
+}
+
+css styles
+  : assets/theme.scss
+  : usage-requirements
+    <asciidoctor-attribute>stylesheet=styles.css
+    <asciidoctor-attribute>"theme-color=#22272e"
+  ;
+
+alias theme
+  : styles
+  : usage-requirements
+    [ theme-properties templates : templates/include ]
+  ;
+
+
+install install-theme : styles : <location>(htmldir)/assets ;
+
+
+rule render-page ( source ) {
+  local baseurl = [ path.relative $(source:D) pages ] ;
+  local assetdir = [ path.relative-to $(baseurl) assets ] ;
+  local target = $(source:S=) ;
+  html $(target)
+    : $(source) theme
+    : <asciidoctor-attribute>project-title="Grisumbras's Blog"
+      <asciidoctor-attribute>repository="https://github.com/grisumbras/grisumbras.github.io"
+      <asciidoctor-attribute>source=$(source)
+      <asciidoctor-attribute>baseurl=$(baseurl)
+      <asciidoctor-attribute>stylesdir=$(assetdir)
+    ;
+  return $(target) ;
+}
+
+rule install-page ( source ) {
+  local installed-path
+    = [ path.root [ path.relative $(source) pages ] (htmldir) ] ;
+  install $(source).installed : $(source) : <location>$(installed-path:P) ;
+}
+
+local sources = [ glob-tree-ex pages : *.adoc ] ;
+local pages = [ sequence.transform render-page : $(sources) ] ;
+alias install-pages : [ sequence.transform install-page : $(pages) ] ;
+
+explicit install-pages install-theme ;
+alias install : install-pages install-theme ;

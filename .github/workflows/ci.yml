@@ -16,7 +16,10 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt  -qq update
-          sudo apt -qq install -y --no-install-recommends ruby python3-pip
+          sudo apt -qq install -y --no-install-recommends \
+            ruby \
+            python3-pip \
+            sassc
           sudo gem install tilt slim asciidoctor
           sudo pip install conan
           conan profile detect
@@ -24,7 +27,10 @@ jobs:
       - name: Build
         run: |
           . ./build/conanbuild.sh
-          b2 --build-dir=build install-prefix=_site install-htmldir=_site
+          b2 --build-dir=build \
+            variant=release \
+            install-prefix=_site \
+            install-htmldir=_site
           . ./build/deactivate_conanbuild.sh
       - name: Prepare archive
         if: ${{ github.ref == 'refs/heads/master' }}

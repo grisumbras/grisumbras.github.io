@@ -1,0 +1,39 @@
+// Copyright (c) 2024 Dmitry Arkhipov <grisumbras@yandex.ru>
+//
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+
+
+// Viewport size breakpoints (minimum viewport widths at which layout changes).
+// Default breakpoints are: tiny (t), small (s), medium (m), large (l) and
+// huge (h).
+$viewport-breakpoints: (
+  t: 0,
+  s: 576px,
+  m: 768px,
+  l: 992px,
+  // h: 1200px
+) !default;
+
+
+// Returns minimum breakpoint width. Null for the smallest (first) breakpoint.
+@function viewport-breakpoint-min($name, $breakpoints: $viewport-breakpoints) {
+  $min: map-get($breakpoints, $name);
+  @return if($min != 0, $min, null);
+}
+
+
+// Creates a media quiery for  at least the minimum breakpoint width. No query
+// for the smallest breakpoint. Makes the @content apply to the given
+// breakpoint and wider.
+@mixin viewport-breakpoint-up($name, $breakpoints: $viewport-breakpoints) {
+  $min: viewport-breakpoint-min($name, $breakpoints);
+  @if $min {
+    @media (min-width: $min) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
