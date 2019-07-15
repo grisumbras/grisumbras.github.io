@@ -4,4 +4,4 @@
 conan.lock
 graph_info.json
 conaninfo.txt
-project-config.sample.jam
+project-config.jam
