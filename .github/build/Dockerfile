@@ -9,7 +9,9 @@ LABEL "com.github.actions.color"="blue"
 USER root
 
 RUN apt-get -qq update \
-    && apt-get -qq install -y --no-install-recommends ruby \
+    && apt-get -qq install -y --no-install-recommends \
+      ruby \
+      sassc \
     && gem install asciidoctor --pre
 
 ADD entrypoint.sh /entrypoint.sh
