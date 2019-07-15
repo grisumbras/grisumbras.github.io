@@ -1,14 +1,23 @@
 import option ;
 
-using asciidoctor ;
-
 
 project blog
   : build-dir build
+  : default-build <variant>release
   ;
 
 local prefix = [ option.get prefix : build/stage ] ;
+local uri-base = . ;
 
 
-html index : pages/index.adoc ;
+css theme
+  : assets/theme.scss
+  : usage-requirements
+    <asciidoctor-attribute>icons=font
+    <asciidoctor-attribute>linkcss
+    <asciidoctor-attribute>stylesheet=$(uri-base)/assets/theme.css
+  ;
+install theme-installed : theme : <location>$(prefix)/assets ;
+
+html index : pages/index.adoc theme ;
 install index-installed : index : <location>$(prefix) ;
