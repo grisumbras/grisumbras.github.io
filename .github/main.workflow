@@ -32,6 +32,6 @@ action "pull-dependencies" {
 action "add-remotes" {
   uses = "grisumbras/conan-actions/remote-add@0.1.0"
   env = {
-    CONAN_REMOTES = "https://api.bintray.com/conan/bincrafters/public-conan"
+    CONAN_REMOTES = "https://api.bintray.com/conan/grisumbras/conan,https://api.bintray.com/conan/bincrafters/public-conan"
   }
 }
