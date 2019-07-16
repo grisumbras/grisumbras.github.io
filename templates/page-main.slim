@@ -1,0 +1,26 @@
+article#page-content.col-l-10.push-l-1
+  header#title
+    - if t != p
+      div#home-link-box
+        p
+          a.home-link href="#{attr 'base-url', ''}"
+            i.icon
+            | #{p}
+
+    h1 #{t}
+    - if attr? 'subtitle'
+      p.subtitle  #{attr 'subtitle'}
+
+    hr
+
+  div#main-content #{content}
+
+nav.doc-nav
+  - if attr? 'prev'
+    a.prev-page href="#{attr 'baseurl'}/#{attr 'prev'}"
+      i.icon
+      span.text Back
+  - if attr? 'next'
+    a.next-page href="#{attr 'baseurl'}/#{attr 'next'}"
+      i.icon
+      span.text Next

@@ -3,8 +3,11 @@ import regex ;
 
 
 local sass-path = [ os.environ SASS_PATH ] ;
-local sass-includes = [ regex.split "$(sass-path)" [ os.path-separator ] ] ;
+local sass-includes ;
+if $(sass-path) {
+  sass-includes = [ regex.split "$(sass-path)" [ os.path-separator ] ] ;
+}
 
 
 using sass : sassc -I$(sass-includes) ;
-using asciidoctor ;
+using asciidoctor : asciidoctor --trace ;

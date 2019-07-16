@@ -3,27 +3,30 @@ import path ;
 import sequence ;
 
 
-project blog
-  : build-dir build
-  : default-build <variant>release
-  ;
+project blog : build-dir build ;
 
 local prefix = [ option.get prefix : build/stage ] ;
-local uri-base = . ;
+local baseurl = [ option.get baseurl : [ path.root $(prefix) [ path.pwd ] ] ] ;
 
 
-css theme
-  : assets/theme.scss
-  : usage-requirements
-    <asciidoctor-attribute>icons=font
-    <asciidoctor-attribute>linkcss
-    <asciidoctor-attribute>stylesheet=$(uri-base)/assets/theme.css
-  ;
+local rule theme-properties ( path : includes ? ) {
+  local templates = [ glob-tree-ex $(path) : *.* ] ;
+  if $(includes) { templates += [ glob-tree-ex $(includes) : *.* ] ; }
+
+  return
+    <flags>"-T $(path)"
+    <dependency>$(templates)
+    <asciidoctor-attribute>layout-include=$(includes)
+    ;
+}
 
 
 rule render-page ( source ) {
   local target = $(source:S=) ;
-  html $(target) : $(source) theme ;
+  html $(target)
+    : $(source) theme
+    : <asciidoctor-attribute>project-title=grisumbras
+    ;
   return $(target) ;
 }
 
@@ -35,10 +38,25 @@ rule install-page ( source ) {
 }
 
 
+css styles
+  : assets/theme.scss
+  : usage-requirements
+      <asciidoctor-attribute>stylesheet=styles.css
+      <asciidoctor-attribute>stylesdir=$(baseurl)/assets
+      <asciidoctor-attribute>"theme-color=#22272e"
+  ;
+
+alias theme
+  : styles
+  : usage-requirements
+      <asciidoctor-attribute>baseurl=$(baseurl)
+      [ theme-properties templates : templates/include ]
+  ;
+
 local sources = [ glob-tree-ex pages : *.adoc ] ;
 local pages = [ sequence.transform render-page : $(sources) ] ;
 
 alias install
   : [ sequence.transform install-page : $(pages) ]
-    [ install theme.installed : theme : <location>$(prefix)/assets ]
+    [ install styles.installed : styles : <location>$(prefix)/assets ]
   ;

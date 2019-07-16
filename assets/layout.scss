@@ -1,0 +1,84 @@
+// Copyright (c) 2019 Dmitry Arkhipov <grisumbras@gmail.com>
+//
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+
+// layout configuration
+$link-decoration-nav: none !default;
+$nav-menu-case: none !default;
+$nav-brand-case: uppercase !default;
+// $nav-heading-case: uppercase !default;
+$heading-font-weight: 600;
+$collapse-menu-breakpont: m;
+
+#site-navigation {
+  a {
+    display: inline-block;
+    text-decoration: $link-decoration-nav;
+    text-transform: $nav-menu-case;
+    vertical-align: middle;
+    line-height: 2.75rem;
+    color: $header-link-color;
+  }
+
+  .home-link { text-transform: $nav-brand-case; }
+
+  #main-menu {
+    padding-bottom: 1rem;
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+
+      ul { padding-left: 1.5rem; }
+
+      li {
+        border-style: solid;
+        border-color: transparent;
+        border-width: 0 0 0 0.25rem;
+        margin-left: -$grid-gutter-width / 2;
+
+        &:hover { border-color: $header-link-active-color; }
+
+        a {
+          border-style: solid;
+          border-color: transparent;
+          border-width: 0 0 0 $grid-gutter-width / 8;
+          line-height: 1.5rem;
+          margin-left: -$grid-gutter-width / 8;
+          padding-left: $grid-gutter-width * 3 / 8;
+          width: 100%;
+
+          &:hover, &:focus, &:active { color: $header-link-active-color; }
+        }
+      }
+    }
+  }
+
+  .show-menu, .hide-menu {
+    text-align: right;
+    &:before { content:'\2630'; }
+  }
+
+  .home-link, .show-menu, .hide-menu {
+    font-weight: $heading-font-weight;
+    font-size: 1.125rem;
+  }
+
+  // navigation logic
+  .hide-menu { display: none; }
+  &:target {
+    .show-menu { display: none; }
+    .hide-menu { display: inline-block; }
+    #main-menu { display: block; }
+  }
+}
+
+@media (min-width: map-get($viewport-breakpoints, $collapse-menu-breakpont)) {
+  #site-navigation {
+    .show-menu, .hide-menu &:target .show-menu, &:target .hide-menu {
+      display: none;
+    }
+  }
+}

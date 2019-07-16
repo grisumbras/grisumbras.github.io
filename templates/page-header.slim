@@ -1,0 +1,12 @@
+nav#site-navigation.container
+  div.row
+    a.home-link.col-t-9.col-m-none.left-m href="#{attr 'baseurl'}"
+      | Home
+
+    a.show-menu.col-t-3.hide-m href="#site-navigation" title="Show navigation"
+    a.hide-menu.col-t-3.hide-m href="#" title="Hide navigation"
+    div#main-menu.col-t-12.col-m-0.right-m.show-m
+      ul
+        li: a href="#" Blog
+        li: a href="#" Projects
+        li: a href="#" GitHub
