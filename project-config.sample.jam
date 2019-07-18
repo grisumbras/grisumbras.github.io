@@ -9,5 +9,6 @@ if $(sass-path) {
 }
 
 
+using gcc ;
 using sass : sassc -I$(sass-includes) ;
 using asciidoctor : asciidoctor --trace ;
