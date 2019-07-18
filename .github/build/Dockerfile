@@ -12,7 +12,12 @@ RUN apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
       ruby \
       sassc \
-    && gem install asciidoctor --pre
+    && gem install --pre \
+      asciidoctor \
+      tilt \
+      slim \
+      concurrent-ruby \
+    ;
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
