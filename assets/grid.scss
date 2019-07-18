@@ -13,19 +13,17 @@
 // on screen width. This creates a "responsive" or "adaptable" page layout.
 
 
-@import "viewport-breakpoints";
-
-
 // grid configuration
 $grid-columns: 12 !default; // the number of columns in the grid
-$grid-gutter-width: 2rem !default; // the width of gutters between columns
+$grid-gutter-width: 2 * $base-width !default; // the width of gutters between
+                                              // columns
 
 // maximum widths of containers for different screen sizes.
 $container-max-widths: (
   s: 560px,
   m: 750px,
   l: 960px,
-  h: 1160px
+  // h: 1160px
 ) !default;
 
 
@@ -88,23 +86,10 @@ $tiniest: nth(map-keys($viewport-breakpoints), 1);
   @include viewport-breakpoint-up($breakpoint, $viewport-breakpoints) {
     %grid-column-#{$breakpoint}-active { float: left; }
 
-    %grid-right-#{$breakpoint} {
-      padding-left: 1rem;
-      float: right;
-    }
-
-    %grid-center-#{$breakpoint} {
-      margin-left: auto;
-      margin-right: auto;
-      float: none;
-    }
-
     @for $i from 1 through $grid-columns {
       .col-#{$breakpoint}-#{$i} {
         @extend %grid-column-#{$breakpoint}-active;
         width: 100% * $i / 12;
-        .right-#{$breakpoint} { @extend %grid-right-#{$breakpoint}; }
-        .center-#{$breakpoint} { @extend %grid-center-#{$breakpoint}; }
       }
 
       @if $i < $grid-columns {
@@ -127,9 +112,23 @@ $tiniest: nth(map-keys($viewport-breakpoints), 1);
       float: left;
     }
 
-    .right-#{$breakpoint} { @extend %grid-right-#{$breakpoint}; }
+    %grid-right-#{$breakpoint} {
+      padding-left: 1rem;
+      float: right;
+    }
 
+    %grid-center-#{$breakpoint} {
+      margin-left: auto;
+      margin-right: auto;
+      float: none;
+    }
+
+    .right-#{$breakpoint} { @extend %grid-right-#{$breakpoint}; }
     .center-#{$breakpoint} { @extend %grid-center-#{$breakpoint}; }
+    @for $i from 0 through $grid-columns {
+      .right-#{$breakpoint} { @extend %grid-right-#{$breakpoint}; }
+      .center-#{$breakpoint} { @extend %grid-center-#{$breakpoint}; }
+    }
   }
 }
 

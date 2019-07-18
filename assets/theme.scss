@@ -9,6 +9,7 @@
 
 @import "colors";
 @import "viewport-breakpoints";
+@import "dimensions";
 @import "grid";
 @import "layout";
 
@@ -24,6 +25,9 @@ body {
 }
 
 #page-header {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
   background-color: $header-background-color;
   color: $header-color;
 }
