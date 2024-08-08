@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt  -qq update
+          sudo apt -qq install -y --no-install-recommends ruby python3-pip
+          sudo gem install tilt slim asciidoctor
+          sudo pip install conan
+          conan profile detect
+          conan install . -of build
+      - name: Build
+        run: |
+          . ./build/conanbuild.sh
+          b2 --build-dir=build install-prefix=_site install-htmldir=_site
+          . ./build/deactivate_conanbuild.sh
+      - name: Prepare archive
+        if: ${{ github.ref == 'refs/branches/develop' }}
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+
+  deploy:
+    if: ${{ github.ref == 'refs/branches/develop' }}
+    name: Deploy
+    needs: build
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
