@@ -1,6 +1,6 @@
-[build_requires]
-boost_build/1.69.0@bincrafters/stable
+[tool_requires]
+b2/[>=5.2.1]
 
 [generators]
-virtualenv
-b2
+VirtualBuildEnv
+VirtualRunEnv

@@ -1,7 +1,16 @@
+////
+Copyright (c) 2024 Dmitry Arkhipov (grisumbras@yandex.ru)
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+Official repository: https://github.com/grisumbras/grisumbras.github.io
+////
+
 = Lorem Ipsum
 :author: Dmitry Arkhipov
 :description: a test page
-:docdate: 2019-06-01
+:docdate: 2024-08-08
 
 Dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
 incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
