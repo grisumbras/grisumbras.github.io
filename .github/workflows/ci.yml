@@ -27,13 +27,13 @@ jobs:
           b2 --build-dir=build install-prefix=_site install-htmldir=_site
           . ./build/deactivate_conanbuild.sh
       - name: Prepare archive
-        if: ${{ github.ref == 'refs/branches/develop' }}
+        if: ${{ github.ref == 'refs/heads/develop' }}
         uses: actions/upload-pages-artifact@v3
         with:
           path: '_site'
 
   deploy:
-    if: ${{ github.ref == 'refs/branches/develop' }}
+    if: ${{ github.ref == 'refs/heads/develop' }}
     name: Deploy
     needs: build
 
